@@ -1,0 +1,115 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="fr" lang="fr" dir="ltr">
+  <head>
+    <title>Menu</title>
+	<script>
+	
+	function shuffleArray(array) {
+		for (let i = array.length - 1; i > 0; i--) {
+			const j = Math.floor(Math.random() * (i + 1));
+			[array[i], array[j]] = [array[j], array[i]];
+		}
+	}
+	
+	var simples = [
+		"Knackies",
+		"Steaks hachés",
+		"Poissons Panés",
+		"Oeufs au plat",
+		"Omelette",
+		"Saucisses",
+		"Escalopes de poulet/dinde",
+		"Cordons bleus",
+		"Buns"
+	];
+
+	var avec = [
+		"Haricots verts",
+		"Petits pois / Carottes",
+		"Epinards / Poireaux surgelés",
+		"Galette de légumes",
+		"Frites",
+		"Purée",
+		"Semoule",
+		"Quinoa",
+		"Polenta",
+		"Ratatouille",
+		"Carottes rapées",
+		"Courgettes",
+		"Riz"
+	];
+	
+	var plats = [
+		"Paupiettes <br/> Riz",
+		"Old El Paso",
+		"Semoule <br/> Ratatouille",
+		"Boeuf bourguignon",
+		"Pot au feu",
+		"Quenelles / riz",
+		"Gratin (chou-fleur,endives-jambon,courge...)",
+		"Sushis, raclette, fondue, tartiflette",
+		"Choucroute",
+		"Saumon <br/> Riz",
+		"Cassoulet",
+		"Piperade",
+		"Croques-monsieurs"
+	];
+	
+	function fill() {
+	console.log(document.getElementsByTagName("td"));
+		Array.from(document.getElementsByTagName("td")).map((td) => {
+			if (td.className) {
+				td.innerHTML = choix(td.className);
+			}
+		});
+	}
+	
+	function choix(name) {
+		if (name === "simple") {
+			shuffleArray(simples);
+			shuffleArray(avec);
+			return simples.pop() + "<br/>" + avec.pop();
+		} else {
+			shuffleArray(plats);
+			return plats.pop();
+		}
+	}
+	
+	</script>
+  </head>
+  <body onload="fill()">
+	<table border="1">
+		<tr>
+			<th></th>
+			<th>SAMEDI</th>
+			<th>DIMANCHE</th>
+			<th>LUNDI</th>
+			<th>MARDI</th>
+			<th>MERCREDI</th>
+			<th>JEUDI</th>
+			<th>VENDREDI</th>
+		</tr>
+		<tr>
+			<th>MIDI</th>
+			<td>Restes</td>
+			<td class="plat"></td>
+			<td class="simple"></td>
+			<td class="simple"></td>
+			<td class="simple"></td>
+			<td class="simple"></td>
+			<td class="simple"></td>
+		</tr>
+		<tr>
+			<th>SOIR</th>
+			<td class="plat"></td>
+			<td>Soupe / Gaspat<br/>Fromage</td>
+			<td>Salade</td>
+			<td>Pates</td>
+			<td>Marie Cuisine</td>
+			<td>Quiche</td>
+			<td class="simple"></td>
+		</tr>
+	</table>
+  </body>
+</html>
