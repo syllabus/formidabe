@@ -5,9 +5,31 @@
     <title>Menu</title>
 	<script>
 	
-	function shuffleArray(array) {
+	Date.prototype.getWeekNumber = function(){
+	  var d = new Date(Date.UTC(this.getFullYear(), this.getMonth(), this.getDate()));
+	  var dayNum = d.getUTCDay() || 7;
+	  d.setUTCDate(d.getUTCDate() + 4 - dayNum);
+	  var yearStart = new Date(Date.UTC(d.getUTCFullYear(),0,1));
+	  return Math.ceil((((d - yearStart) / 86400000) + 1)/7)
+	};
+
+	function sfc32(a, b, c, d) {
+	  return function() {
+		a |= 0; b |= 0; c |= 0; d |= 0;
+		let t = (a + b | 0) + d | 0;
+		d = d + 1 | 0;
+		a = b ^ b >>> 9;
+		b = c + (c << 3) | 0;
+		c = (c << 21 | c >>> 11);
+		c = c + t | 0;
+		return (t >>> 0) / 4294967296;
+	  }
+	}
+
+	
+	function shuffleArray(array, getRand) {
 		for (let i = array.length - 1; i > 0; i--) {
-			const j = Math.floor(Math.random() * (i + 1));
+			const j = Math.floor(getRand() * (i + 1));
 			[array[i], array[j]] = [array[j], array[i]];
 		}
 	}
@@ -21,7 +43,8 @@
 		"Saucisses",
 		"Escalopes de poulet/dinde",
 		"Cordons bleus",
-		"Buns"
+		"Buns",
+		"Jambon"
 	];
 
 	var avec = [
@@ -57,22 +80,32 @@
 	];
 	
 	function fill() {
-	console.log(document.getElementsByTagName("td"));
+		var s = simples.slice();
+		var a = avec.slice();
+		var p = plats.slice();
+
+		const date = new Date();
+		var seed1 = date.getFullYear();
+		var seed2 = date.getWeekNumber();
+		var seed3 = 498563244;
+		var seed4 = parseInt(document.getElementById("seed").value);
+		const getRand = sfc32(seed1, seed2, seed3, seed4);
+
 		Array.from(document.getElementsByTagName("td")).map((td) => {
 			if (td.className) {
-				td.innerHTML = choix(td.className);
+				td.innerHTML = choix(td.className, s, a, p, getRand);
 			}
 		});
 	}
 	
-	function choix(name) {
+	function choix(name, s, a, p, getRand) {
 		if (name === "simple") {
-			shuffleArray(simples);
-			shuffleArray(avec);
-			return simples.pop() + "<br/>" + avec.pop();
+			shuffleArray(s, getRand);
+			shuffleArray(a, getRand);
+			return s.pop() + "<br/>" + a.pop();
 		} else {
-			shuffleArray(plats);
-			return plats.pop();
+			shuffleArray(p, getRand);
+			return p.pop();
 		}
 	}
 	
@@ -111,5 +144,6 @@
 			<td class="simple"></td>
 		</tr>
 	</table>
+	Seed: <input type="number" id="seed" onchange="fill()" onkeyup="fill()" value="0" />
   </body>
 </html>
