@@ -7,7 +7,7 @@
 	
 	Date.prototype.getWeekNumber = function(){
 	  var d = new Date(Date.UTC(this.getFullYear(), this.getMonth(), this.getDate()));
-	  var dayNum = d.getUTCDay() || 7;
+	  var dayNum = (d.getUTCDay()+3)%7 || 7;
 	  d.setUTCDate(d.getUTCDate() + 4 - dayNum);
 	  var yearStart = new Date(Date.UTC(d.getUTCFullYear(),0,1));
 	  return Math.ceil((((d - yearStart) / 86400000) + 1)/7)
@@ -38,8 +38,7 @@
 		"Knackies",
 		"Steaks hachés",
 		"Poissons Panés",
-		"Oeufs au plat",
-		"Omelette",
+		"Oeufs",
 		"Saucisses",
 		"Escalopes de poulet/dinde",
 		"Cordons bleus",
@@ -84,7 +83,8 @@
 		var a = avec.slice();
 		var p = plats.slice();
 
-		const date = new Date();
+		const date = new Date(document.getElementById("date").value);
+		document.getElementById("week").innerHTML = date.getWeekNumber();
 		var seed1 = date.getFullYear();
 		var seed2 = date.getWeekNumber();
 		var seed3 = 498563244;
@@ -109,9 +109,14 @@
 		}
 	}
 	
+	function init() {
+		const date = new Date();
+		document.getElementById("date").value = date.toISOString().substring(0, 10);
+	}
+	
 	</script>
   </head>
-  <body onload="fill()">
+  <body onload="init();fill();">
 	<table border="1">
 		<tr>
 			<th></th>
@@ -144,6 +149,9 @@
 			<td class="simple"></td>
 		</tr>
 	</table>
+	<br/>
+	Date: <input type="date" id="date" onchange="fill()" /> Week: <span id="week"></span>
+	<br/>
 	Seed: <input type="number" id="seed" onchange="fill()" onkeyup="fill()" value="0" />
   </body>
 </html>
