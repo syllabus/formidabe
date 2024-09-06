@@ -3,6 +3,21 @@
 <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="fr" lang="fr" dir="ltr">
   <head>
     <title>Menu</title>
+	
+	<style>
+		table {
+			width:90%;
+			padding-left: 5%;
+		}
+		th {
+			height: 50px;
+			font-size: 30px;
+		}
+		td {
+			font-size: 25px;
+		}
+	</style>
+	
 	<script>
 	
 	Date.prototype.getWeekNumber = function(){
@@ -51,14 +66,14 @@
 		"Petits pois / Carottes",
 		"Epinards / Poireaux surgelés",
 		"Galette de légumes",
+		"Ratatouille",
+		"Carottes rapées",
+		"Courgettes",
 		"Frites",
 		"Purée",
 		"Semoule",
 		"Quinoa",
 		"Polenta",
-		"Ratatouille",
-		"Carottes rapées",
-		"Courgettes",
 		"Riz"
 	];
 	
@@ -75,7 +90,8 @@
 		"Saumon <br/> Riz",
 		"Cassoulet",
 		"Piperade",
-		"Croques-monsieurs"
+		"Croques-monsieurs",
+		"Petit salé aux lentilles"
 	];
 	
 	function fill() {
@@ -85,26 +101,27 @@
 
 		const date = new Date(document.getElementById("date").value);
 		document.getElementById("week").innerHTML = date.getWeekNumber();
-		var seed1 = date.getFullYear();
-		var seed2 = date.getWeekNumber();
+		var seed1 = date.getFullYear()*1561159;
+		var seed2 = date.getWeekNumber()*579548;
 		var seed3 = 498563244;
-		var seed4 = parseInt(document.getElementById("seed").value);
+		var seed4 = parseInt(document.getElementById("seed").value)*19694891;
 		const getRand = sfc32(seed1, seed2, seed3, seed4);
+
+		shuffleArray(s, getRand);
+		shuffleArray(a, getRand);
+		shuffleArray(p, getRand);
 
 		Array.from(document.getElementsByTagName("td")).map((td) => {
 			if (td.className) {
-				td.innerHTML = choix(td.className, s, a, p, getRand);
+				td.innerHTML = choix(td.className, s, a, p);
 			}
 		});
 	}
 	
-	function choix(name, s, a, p, getRand) {
+	function choix(name, s, a, p) {
 		if (name === "simple") {
-			shuffleArray(s, getRand);
-			shuffleArray(a, getRand);
 			return s.pop() + "<br/>" + a.pop();
 		} else {
-			shuffleArray(p, getRand);
 			return p.pop();
 		}
 	}
@@ -119,33 +136,43 @@
   <body onload="init();fill();">
 	<table border="1">
 		<tr>
-			<th></th>
-			<th>SAMEDI</th>
-			<th>DIMANCHE</th>
-			<th>LUNDI</th>
-			<th>MARDI</th>
-			<th>MERCREDI</th>
-			<th>JEUDI</th>
-			<th>VENDREDI</th>
+			<th style="width: 20%"></th>
+			<th style="width: 40%">MIDI</th>
+			<th style="width: 40%">SOIR</th>
 		</tr>
 		<tr>
-			<th>MIDI</th>
+			<th>SAMEDI</th>
 			<td>Restes</td>
 			<td class="plat"></td>
-			<td class="simple"></td>
-			<td class="simple"></td>
-			<td class="simple"></td>
-			<td class="simple"></td>
-			<td class="simple"></td>
 		</tr>
 		<tr>
-			<th>SOIR</th>
+			<th>DIMANCHE</th>
 			<td class="plat"></td>
 			<td>Soupe / Gaspat<br/>Fromage</td>
+		</tr>
+		<tr>
+			<th>LUNDI</th>
+			<td class="simple"></td>
 			<td>Salade</td>
+		</tr>
+		<tr>
+			<th>MARDI</th>
+			<td class="simple"></td>
 			<td>Pates</td>
+		</tr>
+		<tr>
+			<th>MERCREDI</th>
+			<td class="simple"></td>
 			<td>Marie Cuisine</td>
+		</tr>
+		<tr>
+			<th>JEUDI</th>
+			<td class="simple"></td>
 			<td>Quiche</td>
+		</tr>
+		<tr>
+			<th>VENDREDI</th>
+			<td class="simple"></td>
 			<td class="simple"></td>
 		</tr>
 	</table>
