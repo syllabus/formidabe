@@ -37,16 +37,21 @@
 		b = c + (c << 3) | 0;
 		c = (c << 21 | c >>> 11);
 		c = c + t | 0;
-		return (t >>> 0) / 4294967296;
+		var rnd = (t >>> 0) / 4294967296;
+		//console.log(" ------------------------------------ " + rnd);
+		return rnd;
 	  }
 	}
 
 	
 	function shuffleArray(array, getRand) {
+		//console.log("==== shuffling " + JSON.stringify(array));
 		for (let i = array.length - 1; i > 0; i--) {
 			const j = Math.floor(getRand() * (i + 1));
+			//console.log("  switch " + array[i] + " ("+i+") and " +  array[j] + " ("+j+")");
 			[array[i], array[j]] = [array[j], array[i]];
 		}
+		//console.log("==== shuffled " + JSON.stringify(array));
 	}
 	
 	var simples = [
@@ -101,15 +106,26 @@
 
 		const date = new Date(document.getElementById("date").value);
 		document.getElementById("week").innerHTML = date.getWeekNumber();
-		var seed1 = date.getFullYear()*1561159;
-		var seed2 = date.getWeekNumber()*579548;
-		var seed3 = 498563244;
-		var seed4 = parseInt(document.getElementById("seed").value)*19694891;
+		var v1 = date.getFullYear();
+		var v2 = date.getWeekNumber();
+		var v3 = parseInt(document.getElementById("seed").value);
+		//console.log("Menu generation with " + v1 + ", " + v2 + ", " + v3);
+		var seed1 = (6483*v1 + 1564*v2 + 56248*v3 + 6564) / 17.0;
+		var seed2 = (6145*v1 + 4212*v2 + 98471*v3 + 1751) / 59.0;
+		var seed3 = (1020*v1 + 6172*v2 + 16622*v3 + 8511) / 12.0;
+		var seed4 = (9445*v1 + 3445*v2 + 14561*v3 + 1823) / 58.0;
+		//console.log(" -> seeds: " + seed1 + ", " + seed2 + ", " + seed3 + ", " + seed4);
 		const getRand = sfc32(seed1, seed2, seed3, seed4);
 
+		var init = getRand() * 100;
+		for (var i = 0; i < init; i++) {
+			getRand();
+		}
 		shuffleArray(s, getRand);
 		shuffleArray(a, getRand);
 		shuffleArray(p, getRand);
+		
+		//console.log(JSON.stringify(s));
 
 		Array.from(document.getElementsByTagName("td")).map((td) => {
 			if (td.className) {
